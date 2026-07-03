@@ -63,5 +63,6 @@ O Bad Fallen IA funciona melhor quando você especifica o **mapa** e o **lado (C
 
 ---
 
+OBS: Está tudo no mesmo commit pois tinha subido o .env no repo privado sem perceber antes. Pra não resetar os commits criei um repositório novo limpo.
 
-Boa sorte, e lembre-se: **respeita o Verdadeiro!** 🕶️
+Bom dia, boa tarde e boa noite. E lembre-se: **confia no Verdadeiro!** 🕶️
