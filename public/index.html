@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Professor</title>
+  <link rel="icon" type="image/png" href="images/badfallen.png">
+  <!-- Google Fonts carregadas via link tag HTML -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS v3 com plugin de Tipografia embutido -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-black text-zinc-100 min-h-screen flex flex-col font-sans">
+
+  <header class="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 border-b-2 border-orange-700 py-6 px-8 flex flex-row items-center justify-center gap-6 shadow-lg shadow-orange-500/10">
+    <img src="images/cs2logo.png" class="h-12 object-contain animate-pulse" alt="CS2 Logo">
+    <img src="images/badfallen.png" class="h-14 object-contain" alt="BadFallen">
+  </header>
+
+  <main class="flex-grow flex items-center justify-center p-4 md:p-8 w-full max-w-3xl mx-auto">
+    
+    <!-- Seção de Chat e Setup -->
+    <section class="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col h-[650px] w-full">
+      <div class="py-4 px-6 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50 backdrop-blur-md rounded-t-2xl">
+        <div class="flex items-center gap-3">
+          <div id="match-badge" class="hidden flex items-center gap-2 bg-zinc-800 px-3 py-1 rounded-full text-xs font-bold text-zinc-300">
+            <span id="badge-map">Mapa</span>
+            <span class="text-zinc-600">|</span>
+            <div class="flex items-center gap-1.5">
+              <img id="badge-side-icon" src="" class="h-4 w-4 object-contain" alt="Side Logo">
+              <span id="badge-side" class="uppercase">Lado</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button id="btn-change-setup" class="hidden border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition px-3 py-1.5 rounded-xl text-xs font-semibold" onclick="changeSetup()">Mudar Mapa/Lado</button>
+          <button id="btn-reset-chat" class="hidden border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition px-3 py-1.5 rounded-xl text-xs font-semibold" onclick="resetChat()">Limpar Conversa</button>
+        </div>
+      </div>
+
+      <!-- Setup Screen -->
+      <div id="setup-screen" class="flex-1 flex flex-col p-6 overflow-y-auto justify-between bg-zinc-900">
+        <div>
+          <h2 class="text-xl font-bold text-zinc-100 mb-1 text-center">Configuração da Partida</h2>
+          <p class="text-sm text-zinc-400 mb-6 text-center">Escolha o mapa e o lado do seu time</p>
+          
+          <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-2">1. Selecione o Mapa</h3>
+          <div class="flex flex-wrap justify-center gap-3 mb-6">
+            <!-- Cards de mapa -->
+            <div onclick="selectMap('Anubis')" id="map-Anubis" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/anubis.png" class="w-full h-full object-cover" alt="Anubis">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Anubis</div>
+            </div>
+            <div onclick="selectMap('Cache')" id="map-Cache" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/cache.png" class="w-full h-full object-cover" alt="Cache">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Cache</div>
+            </div>
+            <div onclick="selectMap('Dust II')" id="map-DustII" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/dust2.png" class="w-full h-full object-cover" alt="Dust II">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Dust II</div>
+            </div>
+            <div onclick="selectMap('Inferno')" id="map-Inferno" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/inferno.png" class="w-full h-full object-cover" alt="Inferno">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Inferno</div>
+            </div>
+            <div onclick="selectMap('Mirage')" id="map-Mirage" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/mirage.jpg" class="w-full h-full object-cover" alt="Mirage">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Mirage</div>
+            </div>
+            <div onclick="selectMap('Nuke')" id="map-Nuke" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/nuke.png" class="w-full h-full object-cover" alt="Nuke">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Nuke</div>
+            </div>
+            <div onclick="selectMap('Overpass')" id="map-Overpass" class="map-card relative h-20 overflow-hidden rounded-xl cursor-pointer border-2 border-transparent transition hover:scale-105 duration-200 shadow-sm w-[calc(50%-6px)] md:w-[calc(25%-9px)]">
+              <img src="images/over.png" class="w-full h-full object-cover" alt="Overpass">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center font-bold text-white text-xs tracking-wider uppercase">Overpass</div>
+            </div>
+          </div>
+
+          <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-2">2. Selecione o Lado</h3>
+          <div class="flex gap-4">
+            <div onclick="selectSide('TR')" id="side-TR" class="side-card flex-1 flex flex-col items-center justify-center py-4 border-2 border-zinc-800 bg-zinc-900/50 rounded-xl cursor-pointer transition duration-200 hover:bg-amber-500/5 shadow-sm">
+              <img src="images/terrorista.png" class="h-14 w-auto mb-2 object-contain opacity-70 transition duration-200" id="img-side-TR" alt="Terrorista">
+              <span class="text-lg font-black text-amber-600 tracking-wider">TERRORISTA</span>
+            </div>
+            <div onclick="selectSide('CT')" id="side-CT" class="side-card flex-1 flex flex-col items-center justify-center py-4 border-2 border-zinc-800 bg-zinc-900/50 rounded-xl cursor-pointer transition duration-200 hover:bg-blue-600/5 shadow-sm">
+              <img src="images/ct.png" class="h-14 w-auto mb-2 object-contain opacity-70 transition duration-200" id="img-side-CT" alt="Contra-Terrorista">
+              <span class="text-lg font-black text-blue-600 tracking-wider">CONTRA-TERRORISTA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-center">
+          <button id="btn-start-coaching" disabled onclick="startCoaching()" class="w-full py-3 bg-zinc-800 text-zinc-500 border border-zinc-700 rounded-xl font-bold tracking-wide cursor-not-allowed transition duration-200">
+            Iniciar Treinamento
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Screen -->
+      <div id="chat-screen" class="flex-1 flex flex-col hidden h-full overflow-hidden bg-zinc-950">
+        <div class="flex-1 p-6 overflow-y-auto flex flex-col gap-4 chat-scroll" id="chat-messages">
+          <div class="max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-zinc-100 rounded-bl-sm border border-zinc-800/60 shadow-sm prose prose-invert prose-sm max-w-none">
+            Olá! Sou seu coach tático de equipes de CS2. Posso ajudar seu time a aprimorar setups defensivos de CT, planejar execuções e domínios de mapa padrão de TR, coordenar utilitários combinados e estruturar a comunicação tática.
+          </div>
+        </div>
+
+        <!-- Indicador de digitação (usando animação nativa do Tailwind) -->
+        <div class="max-w-[80%] p-3 px-4 rounded-2xl text-sm self-start bg-zinc-900 text-zinc-400 rounded-bl-sm border border-zinc-800/60 animate-pulse mx-6 mb-4 hidden" id="typing-indicator">
+          O assistente está digitando...
+        </div>
+
+        <div class="p-4 border-t border-zinc-800 flex gap-3 bg-zinc-900/50">
+          <textarea id="prompt-input" placeholder="Ex.: Qual o melhor setup padrão para a Mirage no lado CT?" class="flex-1 h-12 resize-none p-3 bg-zinc-950 text-zinc-100 border border-zinc-800 rounded-xl text-sm focus:outline-none focus:border-amber-500 placeholder-zinc-600 transition" onkeydown="handleKeyPress(event)"></textarea>
+          <button class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-black rounded-xl text-sm font-bold transition active:scale-95" onclick="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    let chatHistory = [];
+    let selectedMap = '';
+    let selectedSide = '';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedHistory = localStorage.getItem('chatHistory');
+      const savedMap = localStorage.getItem('selectedMap');
+      const savedSide = localStorage.getItem('selectedSide');
+
+      if (savedHistory && savedMap && savedSide) {
+        chatHistory = JSON.parse(savedHistory);
+        selectedMap = savedMap;
+        selectedSide = savedSide;
+        startCoaching();
+        renderHistory();
+      } else {
+        changeSetup();
+      }
+    });
+
+    function selectMap(mapId) {
+      selectedMap = mapId;
+      const mapCards = document.querySelectorAll('.map-card');
+      mapCards.forEach(card => card.classList.remove('border-amber-500', 'ring-4', 'ring-amber-500/30'));
+      
+      const elementId = `map-${mapId.replace(/\s+/g, '')}`;
+      const selected = document.getElementById(elementId);
+      if (selected) {
+        selected.classList.add('border-amber-500', 'ring-4', 'ring-amber-500/30');
+      }
+      validateSetupForm();
+    }
+
+    function selectSide(side) {
+      selectedSide = side;
+      const sideCards = document.querySelectorAll('.side-card');
+      sideCards.forEach(card => card.classList.remove('border-amber-500', 'bg-amber-500/10', 'ring-4', 'ring-amber-500/20', 'border-blue-600', 'bg-blue-600/10', 'ring-4', 'ring-blue-600/20'));
+      
+      const imgTR = document.getElementById('img-side-TR');
+      const imgCT = document.getElementById('img-side-CT');
+      if (imgTR) imgTR.classList.add('opacity-70');
+      if (imgCT) imgCT.classList.add('opacity-70');
+
+      const selected = document.getElementById(`side-${side}`);
+      if (selected) {
+        if (side === 'TR') {
+          selected.classList.add('border-amber-500', 'bg-amber-500/10', 'ring-4', 'ring-amber-500/20');
+          if (imgTR) imgTR.classList.remove('opacity-70');
+        } else {
+          selected.classList.add('border-blue-600', 'bg-blue-600/10', 'ring-4', 'ring-blue-600/20');
+          if (imgCT) imgCT.classList.remove('opacity-70');
+        }
+      }
+      validateSetupForm();
+    }
+
+    function validateSetupForm() {
+      const btn = document.getElementById('btn-start-coaching');
+      if (selectedMap && selectedSide) {
+        btn.disabled = false;
+        btn.className = 'w-full py-3 bg-amber-500 text-black rounded-xl font-bold tracking-wide cursor-pointer transition duration-200 hover:bg-amber-600 active:scale-95';
+      } else {
+        btn.disabled = true;
+        btn.className = 'w-full py-3 bg-zinc-800 text-zinc-500 border border-zinc-700 rounded-xl font-bold tracking-wide cursor-not-allowed transition duration-200';
+      }
+    }
+
+    function startCoaching() {
+      document.getElementById('setup-screen').classList.add('hidden');
+      document.getElementById('chat-screen').classList.remove('hidden');
+      
+      document.getElementById('match-badge').classList.remove('hidden');
+      document.getElementById('btn-change-setup').classList.remove('hidden');
+      document.getElementById('btn-reset-chat').classList.remove('hidden');
+      
+      document.getElementById('badge-map').textContent = selectedMap;
+      const sideTextEl = document.getElementById('badge-side');
+      const sideIconEl = document.getElementById('badge-side-icon');
+      
+      sideTextEl.textContent = selectedSide === 'CT' ? 'Contra-Terrorista (CT)' : 'Terrorista (TR)';
+      sideTextEl.className = selectedSide === 'CT' ? 'text-blue-400 font-extrabold' : 'text-amber-500 font-extrabold';
+      if (sideIconEl) {
+        sideIconEl.src = selectedSide === 'CT' ? 'images/ct.png' : 'images/terrorista.png';
+      }
+
+      localStorage.setItem('selectedMap', selectedMap);
+      localStorage.setItem('selectedSide', selectedSide);
+      
+      if (chatHistory.length === 0) {
+        const welcomeMessage = `Olá! Sou seu coach tático de equipes de CS2. Vejo que estamos no mapa **${selectedMap}** jogando no lado **${selectedSide === 'CT' ? 'Contra-Terrorista (CT)' : 'Terrorista (TR)'}**.
+
+Como posso ajudar sua equipe a aprimorar seus setups, táticas de domínio de mapa ou execuções neste cenário hoje?`;
+        
+        const messagesContainer = document.getElementById('chat-messages');
+        messagesContainer.innerHTML = `
+          <div class="max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-zinc-100 rounded-bl-sm border border-zinc-800/60 shadow-sm prose prose-invert prose-sm max-w-none">
+            ${marked.parse(welcomeMessage)}
+          </div>
+        `;
+      }
+    }
+
+    function changeSetup() {
+      document.getElementById('chat-screen').classList.add('hidden');
+      document.getElementById('setup-screen').classList.remove('hidden');
+      
+      document.getElementById('match-badge').classList.add('hidden');
+      document.getElementById('btn-change-setup').classList.add('hidden');
+      document.getElementById('btn-reset-chat').classList.add('hidden');
+    }
+
+    function resetChat() {
+      chatHistory = [];
+      localStorage.removeItem('chatHistory');
+      localStorage.removeItem('selectedMap');
+      localStorage.removeItem('selectedSide');
+      selectedMap = '';
+      selectedSide = '';
+      
+      const mapCards = document.querySelectorAll('.map-card');
+      mapCards.forEach(card => card.classList.remove('border-amber-500', 'ring-4', 'ring-amber-500/30'));
+      const sideCards = document.querySelectorAll('.side-card');
+      sideCards.forEach(card => card.classList.remove('border-amber-500', 'bg-amber-500/10', 'ring-4', 'ring-amber-500/20', 'border-blue-600', 'bg-blue-600/10', 'ring-4', 'ring-blue-600/20'));
+      
+      // Reset image opacities
+      const imgTR = document.getElementById('img-side-TR');
+      const imgCT = document.getElementById('img-side-CT');
+      if (imgTR) imgTR.classList.add('opacity-70');
+      if (imgCT) imgCT.classList.add('opacity-70');
+
+      validateSetupForm();
+      changeSetup();
+    }
+
+    function renderHistory() {
+      const messagesContainer = document.getElementById('chat-messages');
+      
+      const welcomeMessage = `Olá! Sou seu coach tático de equipes de CS2. Vejo que estamos no mapa **${selectedMap}** jogando no lado **${selectedSide === 'CT' ? 'Contra-Terrorista (CT)' : 'Terrorista (TR)'}**.
+
+Como posso ajudar sua equipe a aprimorar seus setups, táticas de domínio de mapa ou execuções neste cenário hoje?`;
+
+      messagesContainer.innerHTML = `
+        <div class="max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-zinc-100 rounded-bl-sm border border-zinc-800/60 shadow-sm prose prose-invert prose-sm max-w-none">
+          ${marked.parse(welcomeMessage)}
+        </div>
+      `;
+
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        if (msg.role === 'assistant') {
+          div.className = 'max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-zinc-100 rounded-bl-sm border border-zinc-800/60 shadow-sm prose prose-invert prose-sm max-w-none';
+          div.innerHTML = marked.parse(msg.content);
+        } else {
+          div.className = 'max-w-[80%] p-4 rounded-2xl text-sm self-end bg-zinc-800 text-zinc-100 rounded-br-sm shadow-sm border border-zinc-700/50';
+          div.textContent = msg.content;
+        }
+        messagesContainer.appendChild(div);
+      });
+      
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    async function sendMessage() {
+      const promptInput = document.getElementById('prompt-input');
+      const promptText = promptInput.value.trim();
+      
+      if (!promptText) return;
+
+      chatHistory.push({ role: 'user', content: promptText });
+      renderHistory();
+      
+      promptInput.value = '';
+      
+      const typingIndicator = document.getElementById('typing-indicator');
+      typingIndicator.classList.remove('hidden');
+      const messagesContainer = document.getElementById('chat-messages');
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      try {
+        const response = await fetch('/api/llm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: promptText,
+            historico: chatHistory,
+            mapa: selectedMap,
+            lado: selectedSide
+          })
+        });
+
+        const data = await response.json();
+        
+        typingIndicator.classList.add('hidden');
+
+        if (!response.ok) {
+          const div = document.createElement('div');
+          div.className = 'max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-red-400 rounded-bl-sm border border-zinc-800/60 shadow-sm';
+          div.textContent = data.erro || 'Ocorreu um erro ao obter resposta.';
+          messagesContainer.appendChild(div);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          return;
+        }
+
+        chatHistory.push({ role: 'assistant', content: data.resposta });
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        renderHistory();
+
+      } catch (error) {
+        typingIndicator.classList.add('hidden');
+        const div = document.createElement('div');
+        div.className = 'max-w-[80%] p-4 rounded-2xl text-sm self-start bg-zinc-900 text-red-400 rounded-bl-sm border border-zinc-800/60 shadow-sm';
+        div.textContent = 'Erro de conexao com o servidor local.';
+        messagesContainer.appendChild(div);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>
